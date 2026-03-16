@@ -45,7 +45,7 @@ The app runs as a **Flask web application** with a single frontend (home page â†
 ### 1. Clone and enter the project
 
 ```bash
-git clone https://github.com/t-abs/AI-Based-Disaster-Prediction-and-Response-System.git
+git clone https://github.com/ranjeet229/AI-Disaster-Prediciton.git
 cd AI-Based-Disaster-Prediction-and-Response-System
 ```
 
