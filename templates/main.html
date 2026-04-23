@@ -72,6 +72,27 @@
     .btn-clear:hover { border-color: var(--accent); color: var(--accent); background: rgba(14,165,233,0.08); }
     body.dark .btn-clear { background: #1e293b; color: #94a3b8; border-color: #475569; }
     body.dark .btn-clear:hover { border-color: #38bdf8; color: #38bdf8; background: rgba(56,189,248,0.12); }
+    .locate-field { align-items: flex-end; justify-content: flex-end; }
+    .locate-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 2px solid var(--input-border);
+      background: var(--input-bg);
+      color: var(--accent);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s, transform 0.15s, color 0.2s;
+      padding: 0;
+      margin-bottom: 1px;
+    }
+    .locate-btn:hover { border-color: var(--accent); background: rgba(14,165,233,0.08); transform: translateY(-1px); }
+    .locate-btn:disabled { opacity: 0.6; cursor: wait; transform: none; }
+    .locate-btn svg { width: 20px; height: 20px; }
+    body.dark .locate-btn { background: #1e293b; border-color: #475569; color: #38bdf8; }
+    body.dark .locate-btn:hover { border-color: #38bdf8; background: rgba(56,189,248,0.12); }
     .actions-row { grid-column: span 3; display: flex; align-items: center; gap: 12px 28px; flex-wrap: wrap; }
     .actions-row .btn-wrap { display: flex; align-items: center; gap: 12px; }
     .actions-row .result-wrap { min-width: 0; }
@@ -145,6 +166,15 @@
           <form id="form-flood" class="form-grid-3">
             <div class="field"><label>Latitude</label><input type="text" name="Latitude" required placeholder="e.g. 25.5"></div>
             <div class="field"><label>Longitude</label><input type="text" name="Longitude" required placeholder="e.g. 85.2"></div>
+            <div class="field locate-field">
+              <button type="button" class="locate-btn" id="flood-location-btn" aria-label="Use current location" title="Use current location">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+                  <circle cx="12" cy="12" r="7" stroke="currentColor" stroke-width="1.8" opacity="0.8"/>
+                  <path d="M12 2.5V5.2M12 18.8V21.5M2.5 12H5.2M18.8 12H21.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>
+              </button>
+            </div>
             <div class="field"><label>Rainfall (mm)</label><input type="text" name="Rainfall (mm)" required placeholder="e.g. 220"></div>
             <div class="field"><label>Temperature (°C)</label><input type="text" name="Temperature (°C)" required placeholder="e.g. 28"></div>
             <div class="field"><label>Humidity (%)</label><input type="text" name="Humidity (%)" required placeholder="e.g. 75"></div>
@@ -189,6 +219,15 @@
           <form id="form-earthquake" class="form-grid-3">
             <div class="field"><label>Latitude</label><input type="text" name="Latitude" required placeholder="e.g. 19.2"></div>
             <div class="field"><label>Longitude</label><input type="text" name="Longitude" required placeholder="e.g. 145.6"></div>
+            <div class="field locate-field">
+              <button type="button" class="locate-btn" id="eq-location-btn" aria-label="Use current location" title="Use current location">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+                  <circle cx="12" cy="12" r="7" stroke="currentColor" stroke-width="1.8" opacity="0.8"/>
+                  <path d="M12 2.5V5.2M12 18.8V21.5M2.5 12H5.2M18.8 12H21.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>
+              </button>
+            </div>
             <div class="actions-row">
               <div class="btn-wrap">
                 <button type="button" class="btn-clear" data-clear="form-earthquake" data-result="earthquake">Clear fields</button>
@@ -222,6 +261,15 @@
           <form id="form-hurricane" class="form-grid-3">
             <div class="field"><label>Latitude</label><input type="text" name="Latitude" required placeholder="e.g. 28"></div>
             <div class="field"><label>Longitude</label><input type="text" name="Longitude" required placeholder="e.g. -95"></div>
+            <div class="field locate-field">
+              <button type="button" class="locate-btn" id="hurricane-location-btn" aria-label="Use current location" title="Use current location">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+                  <circle cx="12" cy="12" r="7" stroke="currentColor" stroke-width="1.8" opacity="0.8"/>
+                  <path d="M12 2.5V5.2M12 18.8V21.5M2.5 12H5.2M18.8 12H21.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>
+              </button>
+            </div>
             <div class="field"><label>Moderate Wind NE</label><input type="text" name="Moderate Wind NE" required placeholder="e.g. 50"></div>
             <div class="field"><label>Moderate Wind SE</label><input type="text" name="Moderate Wind SE" required placeholder="e.g. 50"></div>
             <div class="field"><label>Moderate Wind SW</label><input type="text" name="Moderate Wind SW" required placeholder="e.g. 50"></div>
@@ -278,6 +326,88 @@
         if (resultEl) { resultEl.style.display = 'none'; resultEl.textContent = ''; resultEl.classList.remove('error'); }
       });
     });
+    var eqLocationBtn = document.getElementById('eq-location-btn');
+    if (eqLocationBtn) {
+      eqLocationBtn.addEventListener('click', function() {
+        var eqForm = document.getElementById('form-earthquake');
+        if (!eqForm) return;
+        var latInput = eqForm.querySelector('input[name="Latitude"]');
+        var lonInput = eqForm.querySelector('input[name="Longitude"]');
+        if (!latInput || !lonInput) return;
+        if (!navigator.geolocation) {
+          showResult('earthquake', 'Geolocation is not supported by this browser.', true);
+          return;
+        }
+        eqLocationBtn.disabled = true;
+        eqLocationBtn.title = 'Getting location...';
+        navigator.geolocation.getCurrentPosition(
+          function(position) {
+            latInput.value = position.coords.latitude.toFixed(6);
+            lonInput.value = position.coords.longitude.toFixed(6);
+            showResult('earthquake', 'Location filled successfully.');
+            eqLocationBtn.disabled = false;
+            eqLocationBtn.title = 'Use current location';
+          },
+          function(error) {
+            var message = 'Unable to get location.';
+            if (error && error.code === 1) message = 'Location access denied. Please allow location permissions.';
+            else if (error && error.code === 2) message = 'Location unavailable. Please try again.';
+            else if (error && error.code === 3) message = 'Location request timed out. Please try again.';
+            showResult('earthquake', message, true);
+            eqLocationBtn.disabled = false;
+            eqLocationBtn.title = 'Use current location';
+          },
+          { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+        );
+      });
+    }
+    function bindLocationButton(buttonId, formId, panelId, options) {
+      var btn = document.getElementById(buttonId);
+      if (!btn) return;
+      btn.addEventListener('click', function() {
+        var form = document.getElementById(formId);
+        if (!form) return;
+        var latInput = form.querySelector('input[name="Latitude"]');
+        var lonInput = form.querySelector('input[name="Longitude"]');
+        if (!latInput || !lonInput) return;
+        if (!navigator.geolocation) {
+          showResult(panelId, 'Geolocation is not supported by this browser.', true);
+          return;
+        }
+        btn.disabled = true;
+        btn.title = 'Getting location...';
+        navigator.geolocation.getCurrentPosition(
+          function(position) {
+            latInput.value = position.coords.latitude.toFixed(6);
+            lonInput.value = position.coords.longitude.toFixed(6);
+            if (options && options.fillDateFromDevice) {
+              var now = new Date();
+              var yearInput = form.querySelector('input[name="Year"]');
+              var monthInput = form.querySelector('input[name="Month"]');
+              var dayInput = form.querySelector('input[name="Day"]');
+              if (yearInput) yearInput.value = String(now.getFullYear());
+              if (monthInput) monthInput.value = String(now.getMonth() + 1);
+              if (dayInput) dayInput.value = String(now.getDate());
+            }
+            showResult(panelId, 'Location filled successfully.');
+            btn.disabled = false;
+            btn.title = 'Use current location';
+          },
+          function(error) {
+            var message = 'Unable to get location.';
+            if (error && error.code === 1) message = 'Location access denied. Please allow location permissions.';
+            else if (error && error.code === 2) message = 'Location unavailable. Please try again.';
+            else if (error && error.code === 3) message = 'Location request timed out. Please try again.';
+            showResult(panelId, message, true);
+            btn.disabled = false;
+            btn.title = 'Use current location';
+          },
+          { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+        );
+      });
+    }
+    bindLocationButton('flood-location-btn', 'form-flood', 'flood');
+    bindLocationButton('hurricane-location-btn', 'form-hurricane', 'hurricane', { fillDateFromDevice: true });
     document.getElementById('form-flood').addEventListener('submit', async function(e) {
       e.preventDefault();
       var res = await fetch('/api/predict/flood', { method: 'POST', body: new FormData(this) });
