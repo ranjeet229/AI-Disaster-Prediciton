@@ -4,3 +4,4 @@ myenv
 # Large model files (regenerate with create_all_models.py)
 earthquake_model.pkl
 hurricane_model.pkl
+venv/
